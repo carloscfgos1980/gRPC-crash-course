@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = "proto/gen;genpb";
+
+message HalloRequest {
+    string name = 1;
+    int32 age = 2;
+}
+
+message HalloResponse {
+    string conf_message = 1;
+}

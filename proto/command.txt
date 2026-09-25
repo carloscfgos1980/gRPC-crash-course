@@ -1,0 +1,5 @@
+protoc -I=proto --go_out=. proto/main.proto
+protoc -I=proto --go_out=. proto/user/user.proto
+protoc -I=proto --go_out=. proto/order/order.proto
+
+protoc -I=proto --go_out=. proto/main.proto proto/user/user.proto proto/order/order.proto
