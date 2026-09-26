@@ -25,6 +25,7 @@ type Order struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	User          *User                  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	Address       *Address               `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -73,29 +74,34 @@ func (x *Order) GetUser() *User {
 	return nil
 }
 
-type OrderResponse struct {
+func (x *Order) GetAddress() *Address {
+	if x != nil {
+		return x.Address
+	}
+	return nil
+}
+
+type Address struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Item          string                 `protobuf:"bytes,2,opt,name=item,proto3" json:"item,omitempty"`
-	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	Area          string                 `protobuf:"bytes,1,opt,name=area,proto3" json:"area,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *OrderResponse) Reset() {
-	*x = OrderResponse{}
+func (x *Address) Reset() {
+	*x = Address{}
 	mi := &file_order_order_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *OrderResponse) String() string {
+func (x *Address) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*OrderResponse) ProtoMessage() {}
+func (*Address) ProtoMessage() {}
 
-func (x *OrderResponse) ProtoReflect() protoreflect.Message {
+func (x *Address) ProtoReflect() protoreflect.Message {
 	mi := &file_order_order_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -107,45 +113,30 @@ func (x *OrderResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use OrderResponse.ProtoReflect.Descriptor instead.
-func (*OrderResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use Address.ProtoReflect.Descriptor instead.
+func (*Address) Descriptor() ([]byte, []int) {
 	return file_order_order_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *OrderResponse) GetId() string {
+func (x *Address) GetArea() string {
 	if x != nil {
-		return x.Id
+		return x.Area
 	}
 	return ""
-}
-
-func (x *OrderResponse) GetItem() string {
-	if x != nil {
-		return x.Item
-	}
-	return ""
-}
-
-func (x *OrderResponse) GetQuantity() int32 {
-	if x != nil {
-		return x.Quantity
-	}
-	return 0
 }
 
 var File_order_order_proto protoreflect.FileDescriptor
 
 const file_order_order_proto_rawDesc = "" +
 	"\n" +
-	"\x11order/order.proto\x12\x05order\x1a\x0fuser/user.proto\"7\n" +
+	"\x11order/order.proto\x12\x05order\x1a\x0fuser/user.proto\"a\n" +
 	"\x05Order\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
 	"\x04user\x18\x02 \x01(\v2\n" +
-	".user.UserR\x04user\"O\n" +
-	"\rOrderResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04item\x18\x02 \x01(\tR\x04item\x12\x1a\n" +
-	"\bquantity\x18\x03 \x01(\x05R\bquantityB\x11Z\x0fproto/gen;genpbb\x06proto3"
+	".user.UserR\x04user\x12(\n" +
+	"\aaddress\x18\x03 \x01(\v2\x0e.order.AddressR\aaddress\"\x1d\n" +
+	"\aAddress\x12\x12\n" +
+	"\x04area\x18\x01 \x01(\tR\x04areaB\x11Z\x0fproto/gen;genpbb\x06proto3"
 
 var (
 	file_order_order_proto_rawDescOnce sync.Once
@@ -161,17 +152,18 @@ func file_order_order_proto_rawDescGZIP() []byte {
 
 var file_order_order_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_order_order_proto_goTypes = []any{
-	(*Order)(nil),         // 0: order.Order
-	(*OrderResponse)(nil), // 1: order.OrderResponse
-	(*User)(nil),          // 2: user.User
+	(*Order)(nil),   // 0: order.Order
+	(*Address)(nil), // 1: order.Address
+	(*User)(nil),    // 2: user.User
 }
 var file_order_order_proto_depIdxs = []int32{
 	2, // 0: order.Order.user:type_name -> user.User
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1, // 1: order.Order.address:type_name -> order.Address
+	2, // [2:2] is the sub-list for method output_type
+	2, // [2:2] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_order_order_proto_init() }
