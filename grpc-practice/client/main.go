@@ -24,19 +24,33 @@ func main() {
 	}
 	defer conn.Close()
 
-	client := pb.NewCalculatorClient(conn)
+	addClient := pb.NewCalculatorClient(conn)
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	req := pb.AddRequest{
+	addReq := pb.AddRequest{
 		A: 10,
 		B: 20,
 	}
 
-	res, err := client.Add(ctx, &req)
+	addRes, err := addClient.Add(ctx, &addReq)
 	if err != nil {
 		log.Fatalf("failed to call Add: %v", err)
 	}
-	log.Printf("Result: %d", res.Sum)
+	log.Printf("Result: %d", addRes.Sum)
+
+	// ------------------------------------------------------
+
+	greeterClient := pb.NewGreeterClient(conn)
+
+	greeterReq := pb.HelloRequest{
+		Name: "Carlos",
+	}
+
+	greeterRes, err := greeterClient.Greet(ctx, &greeterReq)
+	if err != nil {
+		log.Fatalf("failed to call Greet: %v", err)
+	}
+	log.Printf("Message: %s", greeterRes.Message)
 }
