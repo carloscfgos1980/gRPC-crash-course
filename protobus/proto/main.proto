@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package main;
+
+import "user/user.proto";
+import "order/order.proto";
+
+option go_package = "proto/gen;genpb";
+
+message HalloRequest {
+    string name = 1;
+    int32 age = 2;
+}
+
+message HalloResponse {
+    string conf_message = 1;
+}
+
+service ExampleService {
+    rpc SayHallo (HalloRequest) returns (HalloResponse);
+    rpc  GetUserOrder (user.User) returns (order.Order);
+}
