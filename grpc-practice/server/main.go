@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	pb "github.com/carloscfgos1980/shop-gRPC/grpc-practice/server/proto/gen"
+	pb "github.com/carloscfgos1980/gRPC-crash-course/grpc-practice/server/proto/gen"
 )
 
 type server struct {

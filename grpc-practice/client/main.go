@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	pb "github.com/carloscfgos1980/shop-gRPC/grpc-practice/client/proto/gen"
+	pb "github.com/carloscfgos1980/gRPC-crash-course/grpc-practice/client/proto/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )

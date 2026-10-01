@@ -1,4 +1,4 @@
-module github.com/carloscfgos1980/shop-gRPC
+module github.com/carloscfgos1980/gRPC-crash-course
 
 go 1.26.4
 
