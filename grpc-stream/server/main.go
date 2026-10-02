@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"log"
 	"net"
 	"time"
@@ -24,6 +25,19 @@ func (s *server) GenerateFibonacci(req *pb.FibonacciRequest, stream pb.Calculato
 		// Simulate some processing delay
 		time.Sleep(500 * time.Millisecond)
 	}
+	return nil
+}
+
+func (s *server) SendNumbers(stream pb.Calculator_SendNumbersServer) error {
+	var sum int32
+	req, err := stream.Recv()
+	if err != nil {
+		if err == io.EOF {
+			return stream.SendAndClose(&pb.NumberResponse{Sum: sum})
+		}
+		return err
+	}
+	sum += req.GetNumber()
 	return nil
 }
 

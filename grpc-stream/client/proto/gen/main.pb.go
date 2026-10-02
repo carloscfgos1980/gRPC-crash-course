@@ -23,7 +23,7 @@ const (
 
 type FibonacciRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	N             int32                  `protobuf:"varint,1,opt,name=n,proto3" json:"n,omitempty"`
+	N             int32                  `protobuf:"varint,1,opt,name=N,proto3" json:"N,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -67,7 +67,7 @@ func (x *FibonacciRequest) GetN() int32 {
 
 type FibonacciResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Number        int32                  `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	Number        int32                  `protobuf:"varint,1,opt,name=Number,proto3" json:"Number,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -116,9 +116,9 @@ const file_main_proto_rawDesc = "" +
 	"\n" +
 	"main.proto\x12\x06mainpg\" \n" +
 	"\x10FibonacciRequest\x12\f\n" +
-	"\x01n\x18\x01 \x01(\x05R\x01n\"+\n" +
+	"\x01N\x18\x01 \x01(\x05R\x01N\"+\n" +
 	"\x11FibonacciResponse\x12\x16\n" +
-	"\x06number\x18\x01 \x01(\x05R\x06number2X\n" +
+	"\x06Number\x18\x01 \x01(\x05R\x06Number2X\n" +
 	"\n" +
 	"Calculator\x12J\n" +
 	"\x11GenerateFibonacci\x12\x18.mainpg.FibonacciRequest\x1a\x19.mainpg.FibonacciResponse0\x01B\x11Z\x0fproto/gen;genpbb\x06proto3"
