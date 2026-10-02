@@ -42,6 +42,24 @@ func (s *server) SendNumbers(stream pb.Calculator_SendNumbersServer) error {
 	}
 }
 
+func (s *server) Chat(stream pb.Calculator_ChatServer) error {
+	for {
+		req, err := stream.Recv()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			log.Fatalln(err)
+		}
+		log.Println("Received chat message:", req.GetMessage())
+		// Echo the message back to the client
+		if err := stream.Send(&pb.ChatMessage{Message: "Server reply: " + req.GetMessage()}); err != nil {
+			log.Fatalln(err)
+		}
+
+	}
+}
+
 func main() {
 	port := ":50051"
 	lis, err := net.Listen("tcp", port)

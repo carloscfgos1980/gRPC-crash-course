@@ -61,4 +61,38 @@ func main() {
 		log.Fatalln(err)
 	}
 	log.Println("Server resp after stream:", res.Sum)
+
+	// -----------------------------------------------
+
+	stream3, err := client.Chat(ctx)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	go func() {
+		for {
+			meg, err := stream3.Recv()
+			if err == io.EOF {
+				return
+			}
+			if err != nil {
+				log.Fatalln(err)
+			}
+			log.Println("Server: ", meg.GetMessage())
+		}
+	}()
+
+	messages := []string{"Hi", "How are you?", "Bye"}
+
+	for _, m := range messages {
+		err := stream3.Send(&pb.ChatMessage{Message: m})
+		if err != nil {
+			log.Fatalln(err)
+		}
+		time.Sleep(time.Second)
+	}
+
+	stream3.CloseSend()
+
+	// -------------------------------------------------------------
 }

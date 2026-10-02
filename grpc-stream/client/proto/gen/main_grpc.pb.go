@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	Calculator_GenerateFibonacci_FullMethodName = "/mainpg.Calculator/GenerateFibonacci"
 	Calculator_SendNumbers_FullMethodName       = "/mainpg.Calculator/SendNumbers"
+	Calculator_Chat_FullMethodName              = "/mainpg.Calculator/Chat"
 )
 
 // CalculatorClient is the client API for Calculator service.
@@ -29,6 +30,7 @@ const (
 type CalculatorClient interface {
 	GenerateFibonacci(ctx context.Context, in *FibonacciRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FibonacciResponse], error)
 	SendNumbers(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[NumberRequest, NumberResponse], error)
+	Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ChatMessage, ChatMessage], error)
 }
 
 type calculatorClient struct {
@@ -71,12 +73,26 @@ func (c *calculatorClient) SendNumbers(ctx context.Context, opts ...grpc.CallOpt
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Calculator_SendNumbersClient = grpc.ClientStreamingClient[NumberRequest, NumberResponse]
 
+func (c *calculatorClient) Chat(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[ChatMessage, ChatMessage], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Calculator_ServiceDesc.Streams[2], Calculator_Chat_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[ChatMessage, ChatMessage]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Calculator_ChatClient = grpc.BidiStreamingClient[ChatMessage, ChatMessage]
+
 // CalculatorServer is the server API for Calculator service.
 // All implementations must embed UnimplementedCalculatorServer
 // for forward compatibility.
 type CalculatorServer interface {
 	GenerateFibonacci(*FibonacciRequest, grpc.ServerStreamingServer[FibonacciResponse]) error
 	SendNumbers(grpc.ClientStreamingServer[NumberRequest, NumberResponse]) error
+	Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error
 	mustEmbedUnimplementedCalculatorServer()
 }
 
@@ -92,6 +108,9 @@ func (UnimplementedCalculatorServer) GenerateFibonacci(*FibonacciRequest, grpc.S
 }
 func (UnimplementedCalculatorServer) SendNumbers(grpc.ClientStreamingServer[NumberRequest, NumberResponse]) error {
 	return status.Error(codes.Unimplemented, "method SendNumbers not implemented")
+}
+func (UnimplementedCalculatorServer) Chat(grpc.BidiStreamingServer[ChatMessage, ChatMessage]) error {
+	return status.Error(codes.Unimplemented, "method Chat not implemented")
 }
 func (UnimplementedCalculatorServer) mustEmbedUnimplementedCalculatorServer() {}
 func (UnimplementedCalculatorServer) testEmbeddedByValue()                    {}
@@ -132,6 +151,13 @@ func _Calculator_SendNumbers_Handler(srv interface{}, stream grpc.ServerStream) 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Calculator_SendNumbersServer = grpc.ClientStreamingServer[NumberRequest, NumberResponse]
 
+func _Calculator_Chat_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServer).Chat(&grpc.GenericServerStream[ChatMessage, ChatMessage]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Calculator_ChatServer = grpc.BidiStreamingServer[ChatMessage, ChatMessage]
+
 // Calculator_ServiceDesc is the grpc.ServiceDesc for Calculator service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -148,6 +174,12 @@ var Calculator_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "SendNumbers",
 			Handler:       _Calculator_SendNumbers_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Chat",
+			Handler:       _Calculator_Chat_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

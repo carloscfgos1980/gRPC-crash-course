@@ -5,8 +5,9 @@ package mainpg;
 option go_package = "proto/gen;genpb";
 
 service Calculator {
-    rpc GenerateFibonacci(FibonacciRequest) returns (stream FibonacciResponse);
-    rpc SendNumbers (stream NumberRequest) returns (NumberResponse);
+    rpc GenerateFibonacci(FibonacciRequest) returns (stream FibonacciResponse); // Server-side streaming RPC
+    rpc SendNumbers (stream NumberRequest) returns (NumberResponse); // Client-side streaming RPC
+    rpc Chat (stream ChatMessage) returns (stream ChatMessage); // Bi-directional streaming RPC
 }
 
 message FibonacciRequest {
@@ -24,3 +25,7 @@ message NumberRequest {
 message NumberResponse {
     int32 Sum = 1;
 }
+
+message ChatMessage {
+    string Message = 1;
+}   
