@@ -6,10 +6,14 @@ import (
 	"log"
 	"net"
 
+	"google.golang.org/grpc/metadata"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
 	pb "github.com/carloscfgos1980/gRPC-crash-course/grpc-practice/server/proto/gen"
+
+	_ "google.golang.org/grpc/encoding/gzip"
 )
 
 type server struct {
@@ -18,6 +22,17 @@ type server struct {
 }
 
 func (s *server) Add(ctx context.Context, req *pb.AddRequest) (*pb.AddResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if ok {
+		log.Println("Metadata:", md)
+	}
+	log.Printf("metadata: %v", md)
+	authHeader, ok := md["authorization"]
+	if ok {
+		log.Println("Authorization Header:", authHeader)
+	}
+	log.Println("Authorization Header:", authHeader)
+
 	sum := req.A + req.B
 
 	log.Println("Sum:", sum)

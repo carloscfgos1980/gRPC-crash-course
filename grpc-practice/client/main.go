@@ -8,6 +8,8 @@ import (
 	pb "github.com/carloscfgos1980/gRPC-crash-course/grpc-practice/client/proto/gen"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/encoding/gzip"
+	"google.golang.org/grpc/metadata"
 )
 
 func main() {
@@ -18,6 +20,9 @@ func main() {
 		log.Fatalf("failed to load TLS credentials: %v", err)
 	}
 	addr := "localhost:50051"
+
+	// conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(creds), grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)))
 	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(creds))
 	if err != nil {
 		log.Fatalf("failed to connect: %v", err)
@@ -29,12 +34,15 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	addReq := pb.AddRequest{
+	addReq := &pb.AddRequest{
 		A: 10,
 		B: 20,
 	}
 
-	addRes, err := addClient.Add(ctx, &addReq)
+	// addRes, err := addClient.Add(ctx, addReq)
+	md := metadata.Pairs("authorization", "Bearer kjsfckafadcada")
+	ctx = metadata.NewOutgoingContext(ctx, md)
+	addRes, err := addClient.Add(ctx, addReq, grpc.UseCompressor(gzip.Name))
 	if err != nil {
 		log.Fatalf("failed to call Add: %v", err)
 	}
