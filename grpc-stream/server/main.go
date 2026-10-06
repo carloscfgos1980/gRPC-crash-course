@@ -8,6 +8,7 @@ import (
 
 	pb "github.com/carloscfgos1980/gRPC-crash-course/grpc-stream/server/proto/gen"
 	"google.golang.org/grpc"
+	_ "google.golang.org/grpc/encoding/gzip"
 )
 
 type server struct {
