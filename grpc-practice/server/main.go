@@ -40,6 +40,12 @@ func (s *server) Add(ctx context.Context, req *pb.AddRequest) (*pb.AddResponse, 
 		log.Printf("failed to send header: %v", err)
 	}
 
+	ResponseTrailers := metadata.Pairs("key2", "value2")
+	err = grpc.SetTrailer(ctx, ResponseTrailers)
+	if err != nil {
+		log.Printf("failed to set trailer: %v", err)
+	}
+
 	sum := req.A + req.B
 
 	log.Println("Sum:", sum)

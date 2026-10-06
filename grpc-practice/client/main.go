@@ -44,13 +44,16 @@ func main() {
 	ctx = metadata.NewOutgoingContext(ctx, md)
 
 	var resHeader metadata.MD
+	var resTrailer metadata.MD
 
-	addRes, err := addClient.Add(ctx, addReq, grpc.UseCompressor(gzip.Name), grpc.Header(&resHeader))
+	addRes, err := addClient.Add(ctx, addReq, grpc.UseCompressor(gzip.Name), grpc.Header(&resHeader), grpc.Trailer(&resTrailer))
 	if err != nil {
 		log.Fatalf("failed to call Add: %v", err)
 	}
+
 	log.Printf("Result: %d", addRes.Sum)
-	log.Printf("Response Header: %v", resHeader)
+	log.Printf("Response Header: %s", resHeader["key1"])
+	log.Printf("Response Trailer: %s", resTrailer["key2"])
 
 	// ------------------------------------------------------
 
