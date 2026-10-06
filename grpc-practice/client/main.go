@@ -42,11 +42,15 @@ func main() {
 	// addRes, err := addClient.Add(ctx, addReq)
 	md := metadata.Pairs("authorization", "Bearer kjsfckafadcada")
 	ctx = metadata.NewOutgoingContext(ctx, md)
-	addRes, err := addClient.Add(ctx, addReq, grpc.UseCompressor(gzip.Name))
+
+	var resHeader metadata.MD
+
+	addRes, err := addClient.Add(ctx, addReq, grpc.UseCompressor(gzip.Name), grpc.Header(&resHeader))
 	if err != nil {
 		log.Fatalf("failed to call Add: %v", err)
 	}
 	log.Printf("Result: %d", addRes.Sum)
+	log.Printf("Response Header: %v", resHeader)
 
 	// ------------------------------------------------------
 

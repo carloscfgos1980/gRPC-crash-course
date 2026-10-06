@@ -33,6 +33,13 @@ func (s *server) Add(ctx context.Context, req *pb.AddRequest) (*pb.AddResponse, 
 	}
 	log.Println("Authorization Header:", authHeader)
 
+	// Set response with headers
+	responseHeader := metadata.Pairs("key1", "value1")
+	err := grpc.SendHeader(ctx, responseHeader)
+	if err != nil {
+		log.Printf("failed to send header: %v", err)
+	}
+
 	sum := req.A + req.B
 
 	log.Println("Sum:", sum)
